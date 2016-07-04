@@ -3,30 +3,45 @@ import ReactDOM from 'react-dom';
 class App extends React.Component {
   constructor() {
     super();
-    this.state = { data: [
-        {id: 1, name: "Simon Bailey"},
-        {id:2, name: "Prosper Otemuyiwa"},
-        {id:3, name: "Kent Dodds"},
-        {id:4, name: "John Lindquist"},
-        {id:5, name: "Joe Maddalone"}
-      ]
+    this.state = {
+      input: '/* add your jsx here */',
+      output: '',
+      err: ''
+    }
+    this.update = this.update.bind(this);
+  }
+  update(e){
+    let code = e.target.value;
+    try {
+      this.setState({
+        output: babel.transform(code, {
+          stage: 0,
+          loose: 'all'
+        }).code,
+        err: ''
+      })
+    }
+    catch(err){
+      this.setState({err: err.message})
     }
   }
   render() {
-    let rows = this.state.data.map( person => {
-      return <PersonRow key={person.id} data={person} />
-    });
-    return <table>
-      <tbody>{rows}</tbody>
-    </table>
+    return (
+      <div>
+        <header>{this.state.err}</header>
+        <div className="container">
+          <textarea
+            onChange={this.update}
+            defaultValue={this.state.input}>
+          </textarea>
+        </div>
+        <pre>
+        {this.state.output}
+        </pre>
+      </div>
+    )
   }
 }
 
-const PersonRow = (props) => {
-  return <tr>
-    <td>{props.data.id}</td>
-    <td>{props.data.name}</td>
-  </tr>
-}
 
 export default App
