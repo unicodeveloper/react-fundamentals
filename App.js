@@ -12,7 +12,7 @@ class App extends React.Component {
     })
   }
   componentWillMount(){
-    console.log("mounting...")
+    console.log("mounting");
   }
   render(){
     console.log('rendering');
